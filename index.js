@@ -9,11 +9,9 @@ app.set('port', (process.env.PORT || 3000));
 
 app.get('/', function(req, res, next){
     console.log(req.query);
-    var userInput = processData(req),
-        key = process.env.BREWERY_DB_KEY,
-        query = userInput.params[0].value,
-        url = 'https://api.brewerydb.com/v2/search?key=' + key + '&q=' + query + '&type=beer&withBreweries=Y';
-
+    var params = buildParams(processData(req)),
+        url = 'sonar.corproot.com/api/timemachine/index' + params;
+    console.log('requesting...', url);
     request(url, function(error, response, body) {
         if (!error && response.statusCode === 200) {
             console.log(body);
@@ -27,7 +25,25 @@ app.get('/', function(req, res, next){
 
 app.listen(app.get('port'), function(){
     console.log('Express started on port ' + app.get('port'));
-})
+});
+
+function buildParams(data){
+    // ?resource=com.wyndhamvo.ui:CustomerUI
+    // &metrics=critical_violations,blocker_violations,major_violations,minor_violations,sqale_index
+    // &fromDateTime=2016-12-13T00:00
+    // &toDateTime=2016-12-21T23:59'
+    var url = '';
+    for (var i = 0; i < data.length; i++) {
+        if(i === 0){
+            url += '?';
+        }else{
+            url += '&';
+        }
+        url += data[i].name + '=' + data[i].value;
+    }
+    console.log('buildParams:', url);
+    return url;
+}
 
 function processData(req){
     var context = {
@@ -46,7 +62,7 @@ function processData(req){
 }
 
 function setHeaders(req, res, next){
-    res.setHeader('Access-Control-Allow-Origin', 'http://andrewnater.com');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', false);
