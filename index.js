@@ -9,15 +9,16 @@ app.set('port', (process.env.PORT || 3000));
 
 app.get('/', function(req, res, next){
     console.log(req.query);
-    var params = buildParams(processData(req)),
+    var params = stringifyParams(processData(req).params),
         url = 'http://sonar.corproot.com/api/timemachine/index' + params;
-    console.log('requesting...', url);
+    console.log('requesting: ' + url);
     request(url, function(error, response, body) {
         if (!error && response.statusCode === 200) {
             console.log(body);
             res.send(body);
         }
         else{
+            console.error('Request Error Occured!');
             console.error(error);
         }
     });
@@ -27,7 +28,7 @@ app.listen(app.get('port'), function(){
     console.log('Express started on port ' + app.get('port'));
 });
 
-function buildParams(data){
+function stringifyParams(data){
     // ?resource=com.wyndhamvo.ui:CustomerUI
     // &metrics=critical_violations,blocker_violations,major_violations,minor_violations,sqale_index
     // &fromDateTime=2016-12-13T00:00
@@ -41,7 +42,6 @@ function buildParams(data){
         }
         url += data[i].name + '=' + data[i].value;
     }
-    console.log('buildParams:', url);
     return url;
 }
 
@@ -57,7 +57,6 @@ function processData(req){
             'value': req.query[p]
         });
     }
-
     return context;
 }
 
