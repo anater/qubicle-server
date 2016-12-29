@@ -1,8 +1,8 @@
 {
-  "name": "beer-goggles-server",
+  "name": "qubicle-server",
   "version": "1.0.0",
-  "description": "Proxy server for BreweryDB to communicate with Beer Goggles",
-  "main": "app.js",
+  "description": "Proxy server for SonarQube Web Api",
+  "main": "index.js",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
@@ -10,17 +10,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node app.js",
+    "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://anater@github.com/anater/Beer-Goggles-Server.git"
-  },
-  "author": "Andrew Nater",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/anater/Beer-Goggles-Server/issues"
-  },
-  "homepage": "https://github.com/anater/Beer-Goggles-Server#readme"
+  "author": "Andrew Nater"
 }
